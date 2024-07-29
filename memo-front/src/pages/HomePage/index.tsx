@@ -1,20 +1,11 @@
-import React, { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import { loginState } from '../../reducers/state'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
 
 const HomePage = () => {
-  const [login, setLogin] = useRecoilState(loginState)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!login) {
-      console.log('로그인이 필요합니다.')
-      navigate('/login')
-    }
-  }, [])
-
-  return <div>index</div>
+  return (
+    <>
+      <div>메인페이지</div>
+    </>
+  )
 }
 
 export default HomePage

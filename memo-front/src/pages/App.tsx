@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Route from './Router'
+import GlobalStyle from '../styles/GlobalStyle'
 
 function App() {
   const [init, setInit] = useState<boolean>(false)
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <div>{init ? <Route></Route> : <div>로딩중...</div>}</div>
     </>
   )
