@@ -40,5 +40,5 @@ const Container = styled.div`
 
 const ContentSection = styled.section<{ $isLoggedIn: boolean }>`
   width: ${({ $isLoggedIn }) => ($isLoggedIn ? 'calc(100% - 200px)' : '100%')};
-  background-color: blue;
+  /* background-color: blue; */
 `
