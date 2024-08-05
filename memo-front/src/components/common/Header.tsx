@@ -9,9 +9,9 @@ const Header = () => {
   const [_, setUser] = useRecoilState(userState)
   const isLoggedIn = useRecoilValue(isLoggedInState)
 
-  const handleLogin = () => {
-    login(setUser, 'admin')
-  }
+  // const handleLogin = () => {
+  //   login(setUser, 'admin')
+  // }
 
   const handleLogout = () => {
     logout(setUser)
@@ -20,11 +20,7 @@ const Header = () => {
   return (
     <HeaderWrap>
       <p>Memo</p>
-      {isLoggedIn ? (
-        <Button onClick={handleLogout}>로그아웃</Button>
-      ) : (
-        <Button onClick={handleLogin}>로그인</Button>
-      )}
+      {isLoggedIn && <Button onClick={handleLogout}>로그아웃</Button>}
     </HeaderWrap>
   )
 }
