@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from './Button'
 import { isLoggedInState, userState } from '../../reducers/state'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { login, logout } from '../../reducers/actions'
+import { logout } from '../../reducers/actions'
 
 const Header = () => {
   const [_, setUser] = useRecoilState(userState)
