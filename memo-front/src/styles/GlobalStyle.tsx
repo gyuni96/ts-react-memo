@@ -32,6 +32,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     cursor: pointer;
   }
+
+  ul , ol , li , dl , dt , dd {
+    list-style: none;
+  }
 `
 
 export default GlobalStyle
