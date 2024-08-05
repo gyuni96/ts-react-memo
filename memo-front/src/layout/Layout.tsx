@@ -3,6 +3,8 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { isLoggedInState } from '../reducers/state'
 import Header from '../components/common/Header'
+import styled from 'styled-components'
+import SideMenu from '../components/common/SideMenu'
 
 const AppLayout = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState)
@@ -19,9 +21,24 @@ const AppLayout = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <Container>
+        {isLoggedIn && <SideMenu />}
+        <ContentSection $isLoggedIn={isLoggedIn}>
+          <Outlet />
+        </ContentSection>
+      </Container>
     </>
   )
 }
 
 export default AppLayout
+
+const Container = styled.div`
+  display: flex;
+  height: calc(100vh - 60px);
+`
+
+const ContentSection = styled.section<{ $isLoggedIn: boolean }>`
+  width: ${({ $isLoggedIn }) => ($isLoggedIn ? 'calc(100% - 200px)' : '100%')};
+  background-color: blue;
+`
