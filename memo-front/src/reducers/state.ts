@@ -14,3 +14,8 @@ export const isLoggedInState = selector({
     return user !== ''
   },
 })
+
+export const displayFolderState = atom<number>({
+  key: 'displayFolderState',
+  default: 1,
+})
