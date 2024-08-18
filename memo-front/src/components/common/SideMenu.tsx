@@ -4,17 +4,18 @@ import apiCall from '../../api/api'
 import { changeDisplayFolder } from '../../reducers/actions'
 import { useRecoilState } from 'recoil'
 import { displayFolderState } from '../../reducers/state'
+import { useNavigate } from 'react-router-dom'
 
 const SideMenu = () => {
   const [folderList, setFolderList] = useState<any>([])
   const [_, setDisplayFolder] = useRecoilState(displayFolderState)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFolder = async () => {
       try {
-        const respone = await apiCall.get('/folder')
-
-        setFolderList(respone)
+        const data = await apiCall.get('/folder')
+        setFolderList(data)
       } catch (e) {
         console.log(e)
       }
@@ -23,8 +24,9 @@ const SideMenu = () => {
     fetchFolder()
   }, [])
 
-  const onClickFolder = (folderId: number) => {
+  const onClickFolder = (folderId: string) => {
     changeDisplayFolder(setDisplayFolder, folderId)
+    navigate('/')
   }
 
   return (

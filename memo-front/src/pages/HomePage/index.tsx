@@ -5,13 +5,13 @@ import { displayFolderState } from '../../reducers/state'
 import styled from 'styled-components'
 import Button from '../../components/common/Button'
 import MemoItem from '../../components/MemoItem'
-import Modal from '../../components/common/Modal'
+import MemoAddModal from '../../components/MemoAddModal'
 
 interface MemoProps {
-  id: number
+  id: string | undefined
   title: string
   content: string
-  folderId: number
+  folderId: string
 }
 
 const HomePage = () => {
@@ -20,10 +20,11 @@ const HomePage = () => {
   const [isModal, setIsModal] = useState<boolean>(false)
 
   useEffect(() => {
+    // 메모리스트 불러오기
     const fetchMemo = async () => {
       try {
         const response: Array<MemoProps> = await apiCall.get(
-          '/memo?folderId=' + displayFolder
+          `/memo?folderId=${displayFolder}`
         )
 
         setMemoList(response)
@@ -35,8 +36,16 @@ const HomePage = () => {
     fetchMemo()
   }, [displayFolder])
 
+  // 모달창열기
   const handleModal = () => {
     setIsModal(!isModal)
+  }
+
+  const handleSaveMemo = (newMemo: MemoProps) => {
+    // 추가된 메모가 현재 폴더의 메모인지 확인 후 추가
+    if (newMemo.folderId === displayFolder) {
+      setMemoList((prevMemoList) => [...prevMemoList, newMemo])
+    }
   }
 
   return (
@@ -52,17 +61,11 @@ const HomePage = () => {
       </MemoWrap>
 
       {isModal && (
-        <Modal setIsModal={setIsModal} title={'메모 추가'}>
-          <label htmlFor="">상위디렉토리</label>
-          <select>
-            <option value="1">1</option>
-            <option value="2">2</option>
-          </select>
-          <label htmlFor="">제목</label>
-          <input type="text" />
-          <label htmlFor="">상세 내용</label>
-          <input type="text" />
-        </Modal>
+        <MemoAddModal
+          setIsModal={setIsModal}
+          onSave={handleSaveMemo}
+          folderId={displayFolder}
+        />
       )}
     </MemoContainer>
   )

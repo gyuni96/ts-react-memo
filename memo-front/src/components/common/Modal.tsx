@@ -5,16 +5,13 @@ import Button from './Button'
 interface ModalProps {
   setIsModal: (isModal: boolean) => void
   title: string
+  addEvent?: () => void
   children?: React.ReactNode
 }
 
-const Modal = ({ setIsModal, title, children }: ModalProps) => {
+const Modal = ({ setIsModal, title, addEvent, children }: ModalProps) => {
   const handleButtonClick = () => {
     setIsModal(false)
-  }
-
-  const handleSaveButtonClick = () => {
-    console.log('save')
   }
 
   return (
@@ -22,10 +19,10 @@ const Modal = ({ setIsModal, title, children }: ModalProps) => {
       <ModalWrap>
         <ModalHeader>
           <h3>{title}</h3>
-          <ModlaButtonWrap>
-            <Button onClick={handleSaveButtonClick}>저장</Button>
+          <ModalButtonWrap>
+            {addEvent && <Button onClick={addEvent}>저장</Button>}
             <Button onClick={handleButtonClick}>닫기</Button>
-          </ModlaButtonWrap>
+          </ModalButtonWrap>
         </ModalHeader>
         <ModalContent>{children}</ModalContent>
       </ModalWrap>
@@ -50,7 +47,7 @@ const ModalWrap = styled.div`
   background-color: #fff;
   padding: 1rem;
   border-radius: 0.6rem;
-  width: 50%;
+  width: 65%;
   height: 50%;
   overflow-y: auto;
 `
@@ -60,16 +57,20 @@ const ModalHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
+  flex-shrink: 0; /* ModalHeader의 높이를 고정 */
 `
 
-const ModlaButtonWrap = styled.div`
+const ModalButtonWrap = styled.div`
   display: flex;
   gap: 0.6rem;
 `
 
 const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
+  flex-grow: 1; /* 남은 공간을 ModalContent가 차지하도록 설정 */
   padding: 0.5rem;
   gap: 1rem;
+  overflow-y: auto; /* ModalContent에서 스크롤이 생기도록 설정 */
+  height: calc(
+    100% - 2rem - 0.5rem - 1rem
+  ); /* ModalHeader의 높이(패딩 포함)를 빼고 남은 공간을 차지하도록 설정 */
 `

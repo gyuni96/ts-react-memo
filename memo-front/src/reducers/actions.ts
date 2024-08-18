@@ -13,8 +13,8 @@ export const logout = (setUser: SetterOrUpdater<string>) => {
 }
 
 export const changeDisplayFolder = (
-  setDisplayFolder: SetterOrUpdater<number>,
-  folderId: number
+  setDisplayFolder: SetterOrUpdater<string>,
+  folderId: string
 ) => {
   setDisplayFolder(folderId)
 }
