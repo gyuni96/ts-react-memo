@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import Modal from './common/Modal'
 import apiCall from '../api/api'
 import styled from 'styled-components'
+import { useRecoilValue } from 'recoil'
+import { displayFolderState } from '../reducers/state'
 
 interface MemoAddModalProps {
   setIsModal: (isModal: boolean) => void
   onSave: (newMemo: MemoProps) => void
-  folderId: string
 }
 
 interface MemoProps {
@@ -16,9 +17,11 @@ interface MemoProps {
   folderId: string
 }
 
-const MemoAddModal = ({ setIsModal, onSave, folderId }: MemoAddModalProps) => {
+const MemoAddModal = ({ setIsModal, onSave }: MemoAddModalProps) => {
   const [folderList, setFolderList] = useState<any>([])
-  const folderRef = useRef<HTMLSelectElement>(null)
+  const displayFolder = useRecoilValue(displayFolderState)
+  const [selectedFolder, setSelectedFolder] = useState<string>(displayFolder)
+  const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
     const folderListFetch = async () => {
@@ -32,8 +35,7 @@ const MemoAddModal = ({ setIsModal, onSave, folderId }: MemoAddModalProps) => {
     e.preventDefault()
 
     const formData = new FormData(e.currentTarget)
-
-    const folderId = folderRef.current?.value
+    const folderId = selectedFolder
     const title = formData.get('addTitleInput')?.toString()
     const content = formData.get('addContentInput')?.toString()
 
@@ -47,14 +49,23 @@ const MemoAddModal = ({ setIsModal, onSave, folderId }: MemoAddModalProps) => {
       const { data } = await apiCall.post('/memo', memoData)
 
       onSave(data)
-
       setIsModal(false)
     } catch (e) {
       console.log(e)
     }
   }
 
-  const handleAddEvent = () => {}
+  const handleAddEvent = () => {
+    if (formRef.current) {
+      formRef.current.dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true })
+      )
+    }
+  }
+
+  const handleOnchangeSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFolder(e.target.value)
+  }
 
   return (
     <Modal
@@ -62,9 +73,9 @@ const MemoAddModal = ({ setIsModal, onSave, folderId }: MemoAddModalProps) => {
       title={'메모 추가'}
       addEvent={handleAddEvent}
     >
-      <FormWrap onSubmit={handleSubmit} name="addForm">
+      <FormWrap onSubmit={handleSubmit} ref={formRef}>
         <label htmlFor="">상위디렉토리</label>
-        <FromSelect ref={folderRef}>
+        <FromSelect value={selectedFolder} onChange={handleOnchangeSelect}>
           {folderList.map((folder: any) => (
             <option key={folder.id} value={folder.id}>
               {folder.name}
@@ -75,7 +86,6 @@ const MemoAddModal = ({ setIsModal, onSave, folderId }: MemoAddModalProps) => {
         <FromInput type="text" name="addTitleInput" />
         <label htmlFor="">상세 내용</label>
         <FromTextArea name="addContentInput" />
-        <button type="submit">전송</button>
       </FormWrap>
     </Modal>
   )

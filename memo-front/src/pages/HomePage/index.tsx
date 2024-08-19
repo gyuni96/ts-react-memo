@@ -61,11 +61,7 @@ const HomePage = () => {
       </MemoWrap>
 
       {isModal && (
-        <MemoAddModal
-          setIsModal={setIsModal}
-          onSave={handleSaveMemo}
-          folderId={displayFolder}
-        />
+        <MemoAddModal setIsModal={setIsModal} onSave={handleSaveMemo} />
       )}
     </MemoContainer>
   )
