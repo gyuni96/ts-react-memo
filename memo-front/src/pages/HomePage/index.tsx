@@ -52,7 +52,9 @@ const HomePage = () => {
     <MemoContainer>
       <MemoTitleWrap>
         <h1>Memo List</h1>
-        <Button onClick={handleModal}>추가</Button>
+        <Button $variant="primary" onClick={handleModal}>
+          추가
+        </Button>
       </MemoTitleWrap>
       <MemoWrap>
         {memoList.map((memo) => (

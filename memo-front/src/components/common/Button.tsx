@@ -1,52 +1,70 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import styled, { css } from 'styled-components'
 
 interface ButtonProps {
-  theme?: String
+  $variant?: 'primary' | 'basic' | 'danger'
+  $disabled?: boolean
   onClick?: () => void
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
-const Button = ({ theme, onClick, children }: ButtonProps) => {
-  useEffect(() => {
-    theme === '' && 'primary'
-  }, [])
+const buttonStyles = {
+  primary: {
+    backgroundColor: '#007bff',
+    color: '#fff',
+    hoverBackgroundColor: '#0056b3',
+    hoverColor: '#fff',
+  },
+  basic: {
+    backgroundColor: '#6c757d',
+    color: '#fff',
+    hoverBackgroundColor: '#5a6268',
+    hoverColor: '#fff',
+  },
+  danger: {
+    backgroundColor: '#dc3545',
+    color: '#fff',
+    hoverBackgroundColor: '#bd2130',
+    hoverColor: '#fff',
+  },
+}
 
+const StyledButton = styled.button<ButtonProps>`
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.6rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+
+  ${({ $variant = 'basic' }) => css`
+    background-color: ${buttonStyles[$variant].backgroundColor};
+    color: ${buttonStyles[$variant].color};
+
+    &:hover {
+      background-color: ${buttonStyles[$variant].hoverBackgroundColor};
+      color: ${buttonStyles[$variant].hoverColor};
+    }
+  `}
+
+  ${({ $disabled }) =>
+    $disabled &&
+    css`
+      cursor: not-allowed;
+      opacity: 0.6;
+    `}
+`
+
+const Button: React.FC<ButtonProps> = ({
+  $variant,
+  $disabled,
+  onClick,
+  children,
+}) => {
   return (
-    <StyledButton theme={theme} onClick={onClick}>
+    <StyledButton $variant={$variant} $disabled={$disabled} onClick={onClick}>
       {children}
     </StyledButton>
   )
 }
 
 export default Button
-
-const buttonTheme = {
-  primary: {
-    backgroundColor: '#fff',
-    color: '#000',
-
-    hoverBackgroundColor: 'red', //'rgba(0, 0, 0, 0.2)',
-    hoverColor: '#fff',
-  },
-  secondary: {
-    backgroundColor: '#000',
-    color: '#fff',
-  },
-}
-
-const StyledButton = styled.button<{ theme: String }>`
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.6rem;
-  padding: 0.5rem 1rem;
-
-  background-color: ${() => buttonTheme.primary.backgroundColor};
-  color: ${() => buttonTheme.primary.color};
-
-  transition: background-color 0.3s, color 0.3s;
-
-  &:hover {
-    background-color: ${() => buttonTheme.primary.hoverBackgroundColor};
-    color: ${() => buttonTheme.primary.hoverColor};
-  }
-`

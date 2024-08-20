@@ -20,7 +20,11 @@ const Modal = ({ setIsModal, title, addEvent, children }: ModalProps) => {
         <ModalHeader>
           <h3>{title}</h3>
           <ModalButtonWrap>
-            {addEvent && <Button onClick={addEvent}>저장</Button>}
+            {addEvent && (
+              <Button $variant="primary" onClick={addEvent}>
+                저장
+              </Button>
+            )}
             <Button onClick={handleButtonClick}>닫기</Button>
           </ModalButtonWrap>
         </ModalHeader>

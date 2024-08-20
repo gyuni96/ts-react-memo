@@ -31,8 +31,13 @@ export default MemoItem
 
 const Item = styled.li`
   margin-bottom: 0.6rem;
-  border: 1px solid #333;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
   width: 100%;
-  height: 80px;
-  padding: 0.6rem;
+  padding: 1rem;
+  transition: all 0.3s;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `

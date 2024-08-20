@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const SideMenu = () => {
   const [folderList, setFolderList] = useState<any>([])
-  const [_, setDisplayFolder] = useRecoilState(displayFolderState)
+  const [displayFolder, setDisplayFolder] = useRecoilState(displayFolderState)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const SideMenu = () => {
     }
 
     fetchFolder()
-  }, [])
+  }, [displayFolder])
 
   const onClickFolder = (folderId: string) => {
     changeDisplayFolder(setDisplayFolder, folderId)
@@ -32,9 +32,23 @@ const SideMenu = () => {
   return (
     <SideMenuWrap>
       <MenuList>
+        <MenuItem>
+          <p>개인 페이지</p>
+          <p
+            onClick={() => {
+              console.log('클릭')
+            }}
+          >
+            +
+          </p>
+        </MenuItem>
         {folderList.map((folder: any) => (
-          <MenuItem onClick={() => onClickFolder(folder.id)} key={folder.id}>
-            {folder.name}
+          <MenuItem
+            onClick={() => onClickFolder(folder.id)}
+            key={folder.id}
+            className={folder.id === displayFolder ? 'active' : ''}
+          >
+            <p>🗂️ {folder.name}</p>
           </MenuItem>
         ))}
       </MenuList>
@@ -47,11 +61,27 @@ export default SideMenu
 const SideMenuWrap = styled.div`
   width: 200px;
   height: 100%;
-  /* background-color: red; */
-  padding: 1rem;
-  border-right: 1px solid #333;
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
 `
 
-const MenuList = styled.ul``
+const MenuList = styled.ul`
+  padding: 1rem;
+`
 
-const MenuItem = styled.li``
+const MenuItem = styled.li`
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    background-color: #dbdbdb;
+    border-radius: 5px;
+  }
+  &.active {
+    background-color: #dbdbdb;
+    border-radius: 5px;
+  }
+`
