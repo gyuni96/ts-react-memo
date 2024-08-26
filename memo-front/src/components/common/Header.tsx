@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from './Button'
-import { isLoggedInState, userState } from '../../reducers/state'
+import { isLoggedInState, userState } from '../../recoil/state'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { logout } from '../../reducers/actions'
+import { logout } from '../../recoil/actions'
 
 const Header = () => {
   const [_, setUser] = useRecoilState(userState)
@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <HeaderWrap>
-      <p>Memo</p>
+      <HeaderTitle>Memo</HeaderTitle>
       {isLoggedIn && <Button onClick={handleLogout}>로그아웃</Button>}
     </HeaderWrap>
   )
@@ -36,4 +36,8 @@ const HeaderWrap = styled.div`
   background-color: #333;
   color: #fff;
   font-size: 24px;
+`
+const HeaderTitle = styled.p`
+  font-size: 24px;
+  color: #fff;
 `
