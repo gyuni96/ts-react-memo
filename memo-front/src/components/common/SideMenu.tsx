@@ -1,54 +1,73 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import apiCall from '../../api/api'
-import { changeDisplayFolder } from '../../reducers/actions'
 import { useRecoilState } from 'recoil'
-import { displayFolderState } from '../../reducers/state'
+import { displayFolderState } from '../../recoil/state'
 import { useNavigate } from 'react-router-dom'
+import useAxiosFetch from '../../hooks/useAxiosFetch'
+import apiCall from '../../api/api'
+import { MemoFolderProps } from '../../types/type'
+import { useEffect } from 'react'
 
 const SideMenu = () => {
-  const [folderList, setFolderList] = useState<any>([])
   const [displayFolder, setDisplayFolder] = useRecoilState(displayFolderState)
   const navigate = useNavigate()
+  const { data, setData } = useAxiosFetch('/folder')
 
   useEffect(() => {
-    const fetchFolder = async () => {
-      try {
-        const data = await apiCall.get('/folder')
-        setFolderList(data)
-      } catch (e) {
-        console.log(e)
+    // 가장 첫번째 폴더로 이동
+    if (data.length > 0) {
+      if (!displayFolder) {
+        setDisplayFolder(data[0].id)
       }
     }
-
-    fetchFolder()
-  }, [displayFolder])
+  }, [data, displayFolder])
 
   const onClickFolder = (folderId: string) => {
-    changeDisplayFolder(setDisplayFolder, folderId)
+    setDisplayFolder(folderId)
     navigate('/')
+  }
+
+  const handleFolderDelete = async (id: string) => {
+    const deleteFlag = confirm('삭제하시겠습니까?')
+    if (deleteFlag) {
+      await apiCall.delete(`/folder/${id}`)
+      setData((prev: MemoFolderProps[]) =>
+        prev.filter((folder: MemoFolderProps) => folder.id !== id)
+      )
+      // 보여지는 폴더가 삭제된 폴더일 경우 초기화
+      if (displayFolder === id) {
+        setDisplayFolder('')
+      }
+
+      // to-do : 삭제시 메모도 삭제해야됨 (추후 구현)
+
+      alert('삭제되었습니다.')
+    }
   }
 
   return (
     <SideMenuWrap>
       <MenuList>
-        <MenuItem>
-          <p>개인 페이지</p>
-          <p
+        {/* <MenuItem>
+          <MenuTitle>개인 페이지</MenuTitle>
+          <MenuIcon
             onClick={() => {
               console.log('클릭')
             }}
           >
-            +
-          </p>
-        </MenuItem>
-        {folderList.map((folder: any) => (
+            ➕
+          </MenuIcon>
+        </MenuItem> */}
+        {data.map((folder: any) => (
           <MenuItem
-            onClick={() => onClickFolder(folder.id)}
             key={folder.id}
             className={folder.id === displayFolder ? 'active' : ''}
           >
-            <p>🗂️ {folder.name}</p>
+            <MenuTitle onClick={() => onClickFolder(folder.id)}>
+              🗂️ {folder.name}
+            </MenuTitle>
+            <MenuIcon onClick={() => handleFolderDelete(folder.id)}>
+              🗑️
+            </MenuIcon>
           </MenuItem>
         ))}
       </MenuList>
@@ -75,6 +94,7 @@ const MenuItem = styled.li`
   transition: all 0.3s;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   &:hover {
     background-color: #dbdbdb;
@@ -84,4 +104,12 @@ const MenuItem = styled.li`
     background-color: #dbdbdb;
     border-radius: 5px;
   }
+`
+const MenuTitle = styled.p`
+  font-size: 1rem;
+  width: 100%;
+`
+
+const MenuIcon = styled.p`
+  font-size: 0.8rem;
 `

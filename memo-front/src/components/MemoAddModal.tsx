@@ -3,33 +3,21 @@ import Modal from './common/Modal'
 import apiCall from '../api/api'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
-import { displayFolderState } from '../reducers/state'
+import { displayFolderState } from '../recoil/state'
+import useAxiosFetch from '../hooks/useAxiosFetch'
+import { MemoProps } from '../types/type'
 
 interface MemoAddModalProps {
   setIsModal: (isModal: boolean) => void
   onSave: (newMemo: MemoProps) => void
 }
 
-interface MemoProps {
-  id: string | undefined
-  title: string
-  content: string
-  folderId: string
-}
-
 const MemoAddModal = ({ setIsModal, onSave }: MemoAddModalProps) => {
-  const [folderList, setFolderList] = useState<any>([])
   const displayFolder = useRecoilValue(displayFolderState)
   const [selectedFolder, setSelectedFolder] = useState<string>(displayFolder)
   const formRef = useRef<HTMLFormElement>(null)
 
-  useEffect(() => {
-    const folderListFetch = async () => {
-      const res = await apiCall.get('/folder')
-      setFolderList(res)
-    }
-    folderListFetch()
-  }, [])
+  const { data } = useAxiosFetch('/folder')
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,6 +37,9 @@ const MemoAddModal = ({ setIsModal, onSave }: MemoAddModalProps) => {
       const { data } = await apiCall.post('/memo', memoData)
 
       onSave(data)
+
+      alert('저장되었습니다.')
+
       setIsModal(false)
     } catch (e) {
       console.log(e)
@@ -76,7 +67,7 @@ const MemoAddModal = ({ setIsModal, onSave }: MemoAddModalProps) => {
       <FormWrap onSubmit={handleSubmit} ref={formRef}>
         <label htmlFor="">상위디렉토리</label>
         <FromSelect value={selectedFolder} onChange={handleOnchangeSelect}>
-          {folderList.map((folder: any) => (
+          {data.map((folder: any) => (
             <option key={folder.id} value={folder.id}>
               {folder.name}
             </option>

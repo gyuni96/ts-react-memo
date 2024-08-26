@@ -1,7 +1,7 @@
 import { useRecoilState } from 'recoil'
 import Button from '../../components/common/Button'
-import { login } from '../../reducers/actions'
-import { userState } from '../../reducers/state'
+import { login } from '../../recoil/actions'
+import { userState } from '../../recoil/state'
 
 const LoginPage = () => {
   const [_, setUser] = useRecoilState(userState)

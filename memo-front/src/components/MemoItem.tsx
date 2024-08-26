@@ -1,13 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-
-interface MemoProps {
-  id: string | undefined
-  title: string
-  content: string
-  folderId: string
-}
+import { MemoProps } from '../types/type'
 
 interface MemoItemProps {
   memo: MemoProps

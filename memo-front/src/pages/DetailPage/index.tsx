@@ -1,35 +1,19 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import apiCall from '../../api/api'
 import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../../components/common/Button'
 import styled from 'styled-components'
-
-interface MemoProps {
-  id: string | undefined
-  title: string | undefined
-  content: string | undefined
-  folderId: string | undefined
-}
+import useAxiosFetch from '../../hooks/useAxiosFetch'
+import { MemoProps } from '../../types/type'
 
 const DetailPage = () => {
-  const [memo, setMemo] = useState<MemoProps>()
-  const [isReadOnly, setIsReadOnly] = useState(true)
   const { id } = useParams()
+  const [isReadOnly, setIsReadOnly] = useState(true)
+  const { data } = useAxiosFetch(`/memo?id=${id}`)
   const formRef = useRef<HTMLFormElement>(null)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const memoDetailFetch = async () => {
-      const res: Array<MemoProps> = await apiCall.get(`/memo?id=${id}`)
-
-      setMemo(res[0])
-    }
-
-    memoDetailFetch()
-  }, [])
-
   const handleDelete = async () => {
-    console.log(id)
     try {
       const deleteFlag = confirm('삭제하시겠습니까?')
       if (deleteFlag) {
@@ -55,14 +39,14 @@ const DetailPage = () => {
     const title: string = formData.get('title')?.toString() || ''
     const content: string = formData.get('content')?.toString() || ''
 
-    const data: MemoProps = {
+    const saveData: MemoProps = {
       id,
       title,
       content,
-      folderId: memo?.folderId || '',
+      folderId: data[0]?.folderId || '',
     }
     try {
-      const res = await apiCall.put(`/memo/${id}`, JSON.stringify(data))
+      const res = await apiCall.put(`/memo/${id}`, JSON.stringify(saveData))
 
       if (res) {
         alert('수정되었습니다.')
@@ -87,7 +71,7 @@ const DetailPage = () => {
   return (
     <DetailContainer>
       <DetailTitleWrap>
-        <h1>{memo?.title}</h1>
+        <h1>{data[0]?.title}</h1>
         <ButtonWrap>
           <Button onClick={() => navigate('/')}>목록</Button>
           {isReadOnly ? (
@@ -101,8 +85,8 @@ const DetailPage = () => {
       </DetailTitleWrap>
       <FormWrap ref={formRef} onSubmit={handleSubmit}>
         <FieldsetWrap disabled={isReadOnly}>
-          <DetailInput type="text" defaultValue={memo?.title} name="title" />
-          <DetailTextArea defaultValue={memo?.content} name="content" />
+          <DetailInput type="text" defaultValue={data[0]?.title} name="title" />
+          <DetailTextArea defaultValue={data[0]?.content} name="content" />
         </FieldsetWrap>
       </FormWrap>
     </DetailContainer>
