@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState } from '../reducers/state'
+import { isLoggedInState } from '../recoil/state'
 import Header from '../components/common/Header'
 import styled from 'styled-components'
 import SideMenu from '../components/common/SideMenu'

@@ -11,10 +11,3 @@ export const logout = (setUser: SetterOrUpdater<string>) => {
   setUser('')
   localStorage.removeItem('user')
 }
-
-export const changeDisplayFolder = (
-  setDisplayFolder: SetterOrUpdater<string>,
-  folderId: string
-) => {
-  setDisplayFolder(folderId)
-}
