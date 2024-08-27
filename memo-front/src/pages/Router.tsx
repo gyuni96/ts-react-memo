@@ -13,6 +13,7 @@ const Router = () => {
           <Route path="/page/:id" element={<DetailPage />} />
           <Route path="/login" element={<LoginPage />} />
         </Route>
+        <Route errorElement={<div>Not Found</div>} />
       </Routes>
     </BrowserRouter>
   )

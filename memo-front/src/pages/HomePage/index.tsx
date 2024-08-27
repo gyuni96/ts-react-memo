@@ -3,10 +3,11 @@ import { useRecoilValue } from 'recoil'
 import { displayFolderState } from '../../recoil/state'
 import styled from 'styled-components'
 import Button from '../../components/common/Button'
-import MemoItem from '../../components/MemoItem'
-import MemoAddModal from '../../components/MemoAddModal'
+import MemoItem from '../../components/ui/MemoItem'
+import MemoAddModal from '../../components/ui/MemoAddModal'
 import useAxios from '../../hooks/useAxiosFetch'
 import { MemoProps } from '../../types/type'
+import { Modal2 } from '../../components/common/Modal2'
 
 const HomePage = () => {
   const displayFolder = useRecoilValue(displayFolderState)
@@ -38,7 +39,7 @@ const HomePage = () => {
           <MemoItem memo={memo} key={memo.id} />
         ))}
       </MemoWrap>
-
+      <Modal2 />
       {isModal && (
         <MemoAddModal setIsModal={setIsModal} onSave={handleSaveMemo} />
       )}

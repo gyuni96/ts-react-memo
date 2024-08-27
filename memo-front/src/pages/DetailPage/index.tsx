@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import apiCall from '../../api/api'
 import { useNavigate, useParams } from 'react-router-dom'
 import Button from '../../components/common/Button'
@@ -60,13 +60,13 @@ const DetailPage = () => {
     }
   }
 
-  const handleAddEvent = () => {
+  const handleAddEvent = useCallback(() => {
     if (formRef.current) {
       formRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true })
       )
     }
-  }
+  }, [formRef])
 
   return (
     <DetailContainer>

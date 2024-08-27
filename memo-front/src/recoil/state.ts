@@ -1,4 +1,4 @@
-import { atom, atomFamily, selector } from 'recoil'
+import { atom, selector } from 'recoil'
 
 // 사용자 정보를 저장하는 atom
 export const userState = atom<string>({
@@ -15,6 +15,7 @@ export const isLoggedInState = selector({
   },
 })
 
+// 보여지는 폴더의 상태를 저장하는 atom
 export const displayFolderState = atom<string>({
   key: 'displayFolderState',
   default: '',

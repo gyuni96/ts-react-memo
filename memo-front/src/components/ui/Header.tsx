@@ -1,6 +1,5 @@
-import React from 'react'
 import styled from 'styled-components'
-import Button from './Button'
+import Button from '../common/Button'
 import { isLoggedInState, userState } from '../../recoil/state'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { logout } from '../../recoil/actions'

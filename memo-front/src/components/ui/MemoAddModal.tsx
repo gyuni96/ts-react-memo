@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Modal from './common/Modal'
-import apiCall from '../api/api'
+import Modal from '../common/Modal'
+import apiCall from '../../api/api'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
-import { displayFolderState } from '../recoil/state'
-import useAxiosFetch from '../hooks/useAxiosFetch'
-import { MemoProps } from '../types/type'
+import { displayFolderState } from '../../recoil/state'
+import useAxiosFetch from '../../hooks/useAxiosFetch'
+import { MemoProps } from '../../types/type'
 
 interface MemoAddModalProps {
   setIsModal: (isModal: boolean) => void
@@ -32,18 +32,12 @@ const MemoAddModal = ({ setIsModal, onSave }: MemoAddModalProps) => {
       return
     }
 
-    try {
-      const memoData: MemoProps = { folderId, title, content, id: undefined }
-      const { data } = await apiCall.post('/memo', memoData)
+    const memoData: MemoProps = { folderId, title, content, id: undefined }
+    const { data } = await apiCall.post('/memo', memoData)
 
-      onSave(data)
-
-      alert('저장되었습니다.')
-
-      setIsModal(false)
-    } catch (e) {
-      console.log(e)
-    }
+    onSave(data)
+    alert('저장되었습니다.')
+    setIsModal(false)
   }
 
   const handleAddEvent = () => {
